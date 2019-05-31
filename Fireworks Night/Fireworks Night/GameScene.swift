@@ -17,17 +17,26 @@ class GameScene: SKScene {
     let bottomEdge = -22
     let rightEdge = 1024 + 22
     
+    var scoreLabel: SKLabelNode!
     var score = 0 {
         didSet {
-            // your code here
+            scoreLabel.text = "Score: \(score)"
         }
     }
+    
     override func didMove(to view: SKView) {
         let background = SKSpriteNode(imageNamed: "background")
         background.position = CGPoint(x: 512, y: 384)
         background.blendMode = .replace
         background.zPosition = -1
         addChild(background)
+        
+        scoreLabel = SKLabelNode(fontNamed: "Chalkduster")
+        scoreLabel.position = CGPoint(x: 16, y: 16)
+        scoreLabel.horizontalAlignmentMode = .left
+        addChild(scoreLabel)
+        
+        score = 0
         
         gameTimer = Timer.scheduledTimer(timeInterval: 6, target: self, selector: #selector(launchFireworks), userInfo: nil, repeats: true)
     }
@@ -139,6 +148,7 @@ class GameScene: SKScene {
             
             node.name = "selected"
             node.colorBlendFactor = 0
+            
         }
     }
     
@@ -158,9 +168,10 @@ class GameScene: SKScene {
                 // this uses a position high above so that rockets can explode off screen
                 fireworks.remove(at: index)
                 firework.removeFromParent()
+                
             }
-
         }
+        
     }
     
     func explode(firework: SKNode) {
