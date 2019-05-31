@@ -24,6 +24,10 @@ class GameScene: SKScene {
         }
     }
     
+    var launches: SKLabelNode!
+    let maxLaunches = 6
+    var numberLaunches = 1
+    
     override func didMove(to view: SKView) {
         let background = SKSpriteNode(imageNamed: "background")
         background.position = CGPoint(x: 512, y: 384)
@@ -37,6 +41,11 @@ class GameScene: SKScene {
         addChild(scoreLabel)
         
         score = 0
+        
+        launches = SKLabelNode(fontNamed: "Chalkduster")
+        launches.position = CGPoint(x: 980, y: 700)
+        launches?.horizontalAlignmentMode = .right
+        addChild(launches)
         
         gameTimer = Timer.scheduledTimer(timeInterval: 6, target: self, selector: #selector(launchFireworks), userInfo: nil, repeats: true)
     }
@@ -89,6 +98,12 @@ class GameScene: SKScene {
     
     @objc func launchFireworks() {
         let movementAmount: CGFloat = 1800
+        launches?.text = " Launches: \(numberLaunches)"
+        if numberLaunches == maxLaunches {
+            gameTimer?.invalidate()
+            return
+        }
+        numberLaunches += 1
         
         switch Int.random(in: 0...3) {
         case 0:
